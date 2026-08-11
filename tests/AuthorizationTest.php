@@ -148,3 +148,17 @@ it('names no ability that would return a code, because there is nothing to retur
 
     expect(Gate::forUser(actorInTeam(GHOST_TEAM))->allows('viewCode', $account))->toBeFalse();
 });
+
+it('reads a ledger entry within its own team and nowhere else', function () {
+    // The entry policy has no yes-able write ability at all — every balance this
+    // module reports is a sum over these rows — so reading is the whole of its
+    // positive surface, and it is still scoped.
+    $mine = GiftCardEntry::factory()->forAccount(GiftCardAccount::factory()->ofTeam(GHOST_TEAM)->create())->create();
+    $theirs = GiftCardEntry::factory()->forAccount(GiftCardAccount::factory()->ofTeam(GHOST_OTHER_TEAM)->create())->create();
+    $actor = actorInTeam(GHOST_TEAM);
+
+    expect(Gate::forUser($actor)->allows('viewAny', GiftCardEntry::class))->toBeTrue()
+        ->and(Gate::forUser($actor)->allows('view', $mine))->toBeTrue()
+        ->and(Gate::forUser($actor)->allows('view', $theirs))->toBeFalse()
+        ->and(Gate::forUser(actorInTeam(null))->allows('viewAny', GiftCardEntry::class))->toBeFalse();
+});

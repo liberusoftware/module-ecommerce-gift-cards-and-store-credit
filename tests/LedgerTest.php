@@ -118,6 +118,12 @@ it('refuses a mass delete', function () {
     GiftCardEntry::query()->delete();
 })->throws(LedgerIsAppendOnly::class);
 
+it('refuses a force delete, which is the other name for the same thing', function () {
+    issueCard(5000);
+
+    GiftCardEntry::query()->forceDelete();
+})->throws(LedgerIsAppendOnly::class);
+
 it('refuses an upsert, which is an insert that may become an update', function () {
     issueCard(5000);
 

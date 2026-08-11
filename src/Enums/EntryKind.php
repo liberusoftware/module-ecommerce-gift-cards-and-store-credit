@@ -10,6 +10,11 @@ namespace Liberu\Ecommerce\GiftCardsAndStoreCredit\Enums;
  * what makes folding the ledger in any order give the same answer — see
  * `AccountState`.
  *
+ * There is deliberately nothing on this enum but its cases. A `movesMoney()`
+ * helper would be a second place that classifies a kind, and the fold's `match`
+ * — which has no `default` arm — is the first. Two classifications of five cases
+ * is one of them being forgotten when a sixth arrives.
+ *
  * There is deliberately **no `Expired` case and no `Enabled` case**, and the
  * reasons are different.
  *
@@ -41,34 +46,4 @@ enum EntryKind: string
 
     /** The card was stopped. Sets a flag; contributes nothing to the balance. */
     case Disabled = 'disabled';
-
-    /**
-     * Whether this kind changes what the card is worth.
-     *
-     * Used by the telemetry logger to pick a level, and by nothing else — the
-     * fold dispatches on the case itself so that a new one without an arm fails
-     * the build rather than falling into a helper's `default`.
-     */
-    public function movesMoney(): bool
-    {
-        return match ($this) {
-            self::Issued, self::Credited, self::Redeemed, self::Adjusted => true,
-            self::Disabled => false,
-        };
-    }
-
-    /**
-     * Whether a caller may ask for this kind by name.
-     *
-     * Nothing here is written by a `kind` parameter — each action writes exactly
-     * one kind — but a surface listing what happened wants to know which rows
-     * were somebody's decision and which were the card being sold.
-     */
-    public function isOperatorAction(): bool
-    {
-        return match ($this) {
-            self::Adjusted, self::Disabled => true,
-            self::Issued, self::Credited, self::Redeemed => false,
-        };
-    }
 }
