@@ -1,0 +1,24 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# A publish sweep pushes every package within seconds of the others. Superseding
+# this repository's previous run keeps a re-publish from stacking on a sweep that
+# has not finished.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    uses: liberusoftware/.github/.github/workflows/package-tests.yml@main
+    with:
+      phpstan-level: 1
+      # ADR 0001 of the Ecommerce repository: 80% is the floor for an extracted
+      # module, not an aspiration to ratchet towards later.
+      coverage-threshold: 80

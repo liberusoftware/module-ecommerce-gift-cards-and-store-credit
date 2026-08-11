@@ -1,0 +1,42 @@
+{
+    "name": "liberusoftware/ecommerce-gift-cards-and-store-credit",
+    "description": "A gift card is a bearer credential and a balance, and this package stores neither of them the way you would expect. The code is never in a column — only a keyed lookup index and a per-row hash — and the balance is a fold over an append-only ledger. Integer minor units, no default currency, and redemption against a different currency is refused rather than converted.",
+    "type": "liberu-module",
+    "license": "MIT",
+    "version": "0.1.0",
+    "require": {
+        "php": "^8.5",
+        "laravel/framework": "^13.0",
+        "liberusoftware/module-manager": "^1.4"
+    },
+    "require-dev": {
+        "liberusoftware/package-testbench": "^1.7",
+        "pestphp/pest": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Liberu\\Ecommerce\\GiftCardsAndStoreCredit\\": "src/",
+            "Liberu\\Ecommerce\\GiftCardsAndStoreCredit\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Liberu\\Ecommerce\\GiftCardsAndStoreCredit\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "liberu": {
+            "name": "ecommerce-gift-cards-and-store-credit"
+        }
+    },
+    "scripts": {
+        "test": "pest"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

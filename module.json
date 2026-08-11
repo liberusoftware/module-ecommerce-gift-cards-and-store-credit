@@ -1,0 +1,46 @@
+{
+    "$schema": "https://schemas.liberu.dev/module/v1.json",
+    "name": "ecommerce-gift-cards-and-store-credit",
+    "display_name": "Gift Cards and Store Credit",
+    "description": "Balances a merchant owes, held as an append-only ledger and folded on every read — there is no balance column anybody can edit. A gift card code is a bearer credential: no column in this module can hold one in plain text, the full code is returned once at issue and never again, and every redemption failure answers identically so a guess never confirms a hit. Store credit is the same ledger with a different issue path. No default currency, and a redemption in another currency is refused rather than converted.",
+    "version": "0.1.0",
+    "category": "product",
+    "provider": "Liberu\\Ecommerce\\GiftCardsAndStoreCredit\\GiftCardsAndStoreCreditServiceProvider",
+    "requires": {
+        "php": "^8.5",
+        "laravel": "^13.0",
+        "packages": {
+            "liberusoftware/module-manager": "^1.4"
+        }
+    },
+    "capabilities": [
+        "ecommerce.gift-cards-and-store-credit"
+    ],
+    "default_enabled": false,
+    "features": [
+        "No plaintext code storable, by schema",
+        "A keyed lookup index, so redemption is still one query",
+        "A per-row hash that survives a pepper leak",
+        "The full code returned once, at issue, and never again",
+        "Every redemption failure answers identically",
+        "A uniform-cost lookup, so timing confirms nothing either",
+        "Crockford base32, twenty characters, a hundred bits",
+        "Per-presenter rate limiting on the code path",
+        "Balance as a fold over an append-only ledger",
+        "An order-insensitive fold proved total three ways",
+        "Store credit as the same ledger with a different issue path",
+        "Integer minor units",
+        "No default currency, ever",
+        "Cross-currency redemption refused, never converted",
+        "Expiry ends redeemability, never the balance",
+        "Partial redemption leaves the remainder on the card",
+        "A refund recorded onto a card by reference alone",
+        "Caller-supplied idempotency keys on every movement",
+        "Permanent conflict and transient in-flight told apart",
+        "Team-scoped, with orphans invisible",
+        "Domain events",
+        "Read models",
+        "Gift card queries",
+        "Telemetry that cannot write a code"
+    ]
+}
